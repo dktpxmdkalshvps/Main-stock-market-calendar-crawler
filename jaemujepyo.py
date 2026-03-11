@@ -2,7 +2,7 @@ import OpenDartReader
 import pandas as pd
 
 # 1. API 키 설정 (메일로 받은 키를 꼭 넣어주세요)
-api_key = 'e08b49bfc7ba056a74dd0e5af8b919de558a7d51' 
+api_key = '' 
 dart = OpenDartReader(api_key)
 
 def get_financial_summary(corp_code, year):
