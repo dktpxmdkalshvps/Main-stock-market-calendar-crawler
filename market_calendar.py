@@ -72,7 +72,7 @@ class DartEarningsCalendar:
     API 키 발급: https://opendart.fss.or.kr/intro/main.do
     """
     BASE_URL = "https://opendart.fss.or.kr/api"
-    api_key = 'e08b49bfc7ba056a74dd0e5af8b919de558a7d51'
+    api_key = ''
 
     def __init__(self, api_key: str):
         self.api_key = api_key
@@ -687,7 +687,7 @@ class KRXHolidayCalendar:
 # 8. 종합 캘린더 수집기
 # ─────────────────────────────────────────
 
-dart_api_key = "e08b49bfc7ba056a74dd0e5af8b919de558a7d51"
+dart_api_key = ""
 
 class StockMarketCalendar:
     """
@@ -750,7 +750,8 @@ class StockMarketCalendar:
 
         if "yahoo" in sources:
             print("🇺🇸 [4/5] Yahoo Finance - 미국 실적 발표 수집 중...")
-            results["미국_실적발표"] = self.yahoo.get_week_earnings()
+            results["미국_실적발표"] = 
+          self.yahoo.get_week_earnings()
 
         if "investing" in sources:
             print("🌐 [5/5] Investing.com - 글로벌 경제 지표 수집 중...")
