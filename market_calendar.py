@@ -750,8 +750,7 @@ class StockMarketCalendar:
 
         if "yahoo" in sources:
             print("🇺🇸 [4/5] Yahoo Finance - 미국 실적 발표 수집 중...")
-            results["미국_실적발표"] = 
-          self.yahoo.get_week_earnings()
+            results["미국_실적발표"] = self.yahoo.get_week_earnings()
 
         if "investing" in sources:
             print("🌐 [5/5] Investing.com - 글로벌 경제 지표 수집 중...")
@@ -804,7 +803,7 @@ class StockMarketCalendar:
 def create_api_server():
     """
     Flask를 이용한 REST API 서버
-    pip install flask 필요
+    pip install flask flask-limiter 필요
     
     엔드포인트:
       GET /calendar              - 전체 캘린더
@@ -821,6 +820,18 @@ def create_api_server():
 
     app = Flask(__name__)
     calendar = StockMarketCalendar()
+
+    try:
+        from flask_limiter import Limiter
+        from flask_limiter.util import get_remote_address
+        limiter = Limiter(
+            get_remote_address,
+            app=app,
+            default_limits=["10 per minute"],
+            storage_uri="memory://"
+        )
+    except ImportError:
+        print("Flask-Limiter가 설치되지 않아 API 요청 속도 제한이 비활성화되었습니다: pip install flask-limiter")
 
     def df_to_response(df: pd.DataFrame):
         if df is None or df.empty:

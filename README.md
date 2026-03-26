@@ -35,7 +35,7 @@
 ### 1. 환경 설치
 필요한 라이브러리를 설치합니다.
 ```bash
-pip install requests beautifulsoup4 pandas lxml openpyxl flask pykrx pandas-market-calendars OpenDartReader
+pip install requests beautifulsoup4 pandas lxml openpyxl flask flask-limiter pykrx pandas-market-calendars OpenDartReader
 ```
 
 ### 2. 기본 실행 (데이터 수집 및 파일 저장)
