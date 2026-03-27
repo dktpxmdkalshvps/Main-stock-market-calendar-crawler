@@ -28,8 +28,9 @@ def get_financial_summary(corp_code, year):
     summary = df_filtered[['account_nm', 'thstrm_amount', 'frmtrm_amount']].copy()
     
     # 숫자 변환 및 단위 변경 (억 원)
+    # df.replace를 전체에 적용하는 것보다 개별 컬럼에 str.replace(regex=False)를 사용하는 것이 더 빠릅니다.
     for col in ['thstrm_amount', 'frmtrm_amount']:
-        summary[col] = pd.to_numeric(summary[col].str.replace(',', ''), errors='coerce')
+        summary[col] = pd.to_numeric(summary[col].str.replace(',', '', regex=False), errors='coerce')
     
     summary[['thstrm_amount', 'frmtrm_amount']] /= 100_000_000
     summary = summary.rename(columns={
