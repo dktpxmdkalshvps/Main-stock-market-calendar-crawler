@@ -750,8 +750,7 @@ class StockMarketCalendar:
 
         if "yahoo" in sources:
             print("🇺🇸 [4/5] Yahoo Finance - 미국 실적 발표 수집 중...")
-            results["미국_실적발표"] = 
-          self.yahoo.get_week_earnings()
+            results["미국_실적발표"] = self.yahoo.get_week_earnings()
 
         if "investing" in sources:
             print("🌐 [5/5] Investing.com - 글로벌 경제 지표 수집 중...")
