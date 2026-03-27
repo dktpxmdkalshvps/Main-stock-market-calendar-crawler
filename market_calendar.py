@@ -134,11 +134,15 @@ class NaverEarningsCalendar:
             resp.raise_for_status()
             soup = BeautifulSoup(resp.text, "html.parser")
             rows = []
+
+            # Pre-compile regex for performance
+            date_pattern = re.compile(r'\d{4}[./\-]\d{2}')
+
             for tr in soup.select("table tr"):
                 tds = tr.select("td")
                 if len(tds) >= 4:
                     texts = [td.get_text(strip=True) for td in tds]
-                    if any(re.search(r'\d{4}[./\-]\d{2}', t) for t in texts):
+                    if any(date_pattern.search(t) for t in texts):
                         rows.append({
                             "발표일": texts[0], "기업명": texts[1],
                             "분기": texts[2], "매출액(억)": texts[3],
@@ -163,12 +167,16 @@ class NaverEarningsCalendar:
             resp.raise_for_status()
             soup = BeautifulSoup(resp.text, "html.parser")
             rows = []
+
+            # Pre-compile regex for performance
+            digit_pattern = re.compile(r'\d')
+
             for tr in soup.select("table#earnings_calendar tbody tr, table tbody tr"):
                 tds = tr.select("td")
                 if len(tds) < 3:
                     continue
                 texts = [td.get_text(strip=True) for td in tds]
-                if texts[0] and re.search(r'\d', texts[0]):
+                if texts[0] and digit_pattern.search(texts[0]):
                     rows.append({
                         "발표일": texts[0], "기업명": texts[1] if len(texts) > 1 else "",
                         "분기": texts[2] if len(texts) > 2 else "",
@@ -750,8 +758,7 @@ class StockMarketCalendar:
 
         if "yahoo" in sources:
             print("🇺🇸 [4/5] Yahoo Finance - 미국 실적 발표 수집 중...")
-            results["미국_실적발표"] = 
-          self.yahoo.get_week_earnings()
+            results["미국_실적발표"] = self.yahoo.get_week_earnings()
 
         if "investing" in sources:
             print("🌐 [5/5] Investing.com - 글로벌 경제 지표 수집 중...")
