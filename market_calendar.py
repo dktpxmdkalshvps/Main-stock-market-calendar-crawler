@@ -49,11 +49,13 @@ def get_date_range(start: str = None, end: str = None):
     return start, end
 
 
+DEFAULT_SESSION = requests.Session()
+
 def safe_get(url: str, params: dict = None, session: requests.Session = None, delay: float = 0.5) -> Optional[requests.Response]:
     """안전한 HTTP GET 요청"""
     try:
         time.sleep(delay)
-        s = session or requests.Session()
+        s = session or DEFAULT_SESSION
         resp = s.get(url, headers=HEADERS, params=params, timeout=10)
         resp.raise_for_status()
         return resp
@@ -750,8 +752,7 @@ class StockMarketCalendar:
 
         if "yahoo" in sources:
             print("🇺🇸 [4/5] Yahoo Finance - 미국 실적 발표 수집 중...")
-            results["미국_실적발표"] = 
-          self.yahoo.get_week_earnings()
+            results["미국_실적발표"] = self.yahoo.get_week_earnings()
 
         if "investing" in sources:
             print("🌐 [5/5] Investing.com - 글로벌 경제 지표 수집 중...")
