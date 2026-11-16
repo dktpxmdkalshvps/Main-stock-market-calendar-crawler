@@ -3,7 +3,10 @@ import pandas as pd
 
 # 1. API 키 설정 (메일로 받은 키를 꼭 넣어주세요)
 api_key = '' 
-dart = OpenDartReader(api_key)
+try:
+    dart = OpenDartReader(api_key)
+except Exception:
+    dart = None
 
 def get_financial_summary(corp_code, year):
     # finstate 메서드로 데이터 호출
@@ -40,14 +43,15 @@ def get_financial_summary(corp_code, year):
     return summary.set_index('account_nm')
 
 # 2. 실행 (종목코드 005930 사용)
-try:
-    # '삼성전자' 대신 종목코드를 넣는 것이 더 정확합니다.
-    result = get_financial_summary('005930', 2023)
-    
-    if result is not None:
-        target_accounts = ['매출액', '영업이익', '당기순이익', '자산총계', '부채총계', '자본총계']
-        final_view = result.reindex([acc for acc in target_accounts if acc in result.index])
-        print("\n[분석 결과]")
-        print(final_view)
-except Exception as e:
-    print(f"프로그램 실행 오류: {e}")
+if __name__ == '__main__':
+    try:
+        # '삼성전자' 대신 종목코드를 넣는 것이 더 정확합니다.
+        result = get_financial_summary('005930', 2023)
+
+        if result is not None:
+            target_accounts = ['매출액', '영업이익', '당기순이익', '자산총계', '부채총계', '자본총계']
+            final_view = result.reindex([acc for acc in target_accounts if acc in result.index])
+            print("\n[분석 결과]")
+            print(final_view)
+    except Exception as e:
+        print(f"프로그램 실행 오류: {e}")
