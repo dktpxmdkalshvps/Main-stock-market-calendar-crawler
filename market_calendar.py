@@ -838,8 +838,8 @@ def create_api_server():
         raise RuntimeError("Server mode requires flask-limiter; install it before starting the API") from exc
 
     storage_uri = os.environ.get("RATELIMIT_STORAGE_URI", "memory://")
-    if os.environ.get("FLASK_ENV") == "production" and storage_uri == "memory://":
-        raise RuntimeError("Production requires a shared RATELIMIT_STORAGE_URI (for example redis://...)")
+    if os.environ.get("RATELIMIT_REQUIRE_SHARED_STORAGE") == "1" and storage_uri == "memory://":
+        raise RuntimeError("Shared rate-limit storage required: configure RATELIMIT_STORAGE_URI (for example redis://...)")
 
     app = Flask(__name__)
     Limiter(
