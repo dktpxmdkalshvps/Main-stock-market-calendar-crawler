@@ -813,7 +813,7 @@ class StockMarketCalendar:
 def create_api_server():
     """
     Flask를 이용한 REST API 서버
-    pip install flask 필요
+    pip install flask flask-limiter 필요
     
     엔드포인트:
       GET /calendar              - 전체 캘린더
@@ -828,7 +828,26 @@ def create_api_server():
         print("Flask가 필요합니다: pip install flask")
         return
 
+    # Server mode must fail closed if rate limiting cannot be initialized.
+    # Redis is required in production to share counters across workers/instances.
+    import os
+    try:
+        from flask_limiter import Limiter
+        from flask_limiter.util import get_remote_address
+    except ImportError as exc:
+        raise RuntimeError("Server mode requires flask-limiter; install it before starting the API") from exc
+
+    storage_uri = os.environ.get("RATELIMIT_STORAGE_URI", "memory://")
+    if os.environ.get("RATELIMIT_REQUIRE_SHARED_STORAGE") == "1" and storage_uri == "memory://":
+        raise RuntimeError("Shared rate-limit storage required: configure RATELIMIT_STORAGE_URI (for example redis://...)")
+
     app = Flask(__name__)
+    Limiter(
+        get_remote_address,
+        app=app,
+        default_limits=["10 per minute"],
+        storage_uri=storage_uri,
+    )
     calendar = StockMarketCalendar()
 
     def df_to_response(df: pd.DataFrame):
