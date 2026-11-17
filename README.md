@@ -64,7 +64,7 @@ python market_calendar.py --mode server --port 5000
 - **국내 실적 조회:** `GET http://localhost:5000/calendar/earnings/kr`
 - **공모주 일정 조회:** `GET http://localhost:5000/calendar/ipo`
 
-API 서버는 기본적으로 클라이언트 IP별 **분당 10회** 요청 제한을 적용합니다. `flask-limiter`가 설치되지 않으면 서버 모드는 시작되지 않습니다. 기본 `memory://` 저장소는 로컬 단일 프로세스 개발용입니다. 여러 워커/인스턴스로 운영할 때는 Redis와 같은 공유 저장소를 구성하고 `RATELIMIT_STORAGE_URI=redis://...`, `RATELIMIT_REQUIRE_SHARED_STORAGE=1`을 설정하세요. 리버스 프록시 환경에서는 신뢰할 수 있는 프록시에서 실제 클라이언트 IP 전달을 별도로 설정해야 합니다.
+API 서버는 기본적으로 클라이언트 IP별 **분당 10회** 요청 제한을 적용합니다. `flask-limiter`가 설치되지 않으면 서버 모드는 시작되지 않습니다. 기본 `memory://` 저장소는 로컬 단일 프로세스 개발용입니다. 여러 워커/인스턴스로 운영할 때는 Redis 공유 저장소를 구성하고 `RATELIMIT_STORAGE_URI=redis://...`, `RATELIMIT_REQUIRE_SHARED_STORAGE=1`을 설정하세요. 이 옵션을 활성화하면 메모리 저장소나 빈 저장소 주소는 서버 시작 시 거부됩니다. Redis URL 설정만으로 Redis 연결 상태까지 검증되는 것은 아니므로 배포 전 연결 및 429 동작을 확인하세요. 리버스 프록시 환경에서는 신뢰할 수 있는 프록시에서 실제 클라이언트 IP 전달을 별도로 설정해야 합니다.
 
 ## 🔑 API 키 발급 안내 (선택 사항)
 더 정확하고 풍부한 데이터 수집을 위해 아래 API 키 발급을 권장합니다.
