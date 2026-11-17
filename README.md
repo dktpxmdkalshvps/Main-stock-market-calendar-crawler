@@ -35,7 +35,7 @@
 ### 1. 환경 설치
 필요한 라이브러리를 설치합니다.
 ```bash
-pip install requests beautifulsoup4 pandas lxml openpyxl flask pykrx pandas-market-calendars OpenDartReader
+pip install requests beautifulsoup4 pandas lxml openpyxl flask flask-limiter pykrx pandas-market-calendars OpenDartReader
 ```
 
 ### 2. 기본 실행 (데이터 수집 및 파일 저장)
@@ -63,6 +63,8 @@ python market_calendar.py --mode server --port 5000
 - **전체 일정 조회:** `GET http://localhost:5000/calendar`
 - **국내 실적 조회:** `GET http://localhost:5000/calendar/earnings/kr`
 - **공모주 일정 조회:** `GET http://localhost:5000/calendar/ipo`
+
+API 서버는 기본적으로 클라이언트 IP별 **분당 10회** 요청 제한을 적용합니다. `flask-limiter`가 설치되지 않으면 서버 모드는 시작되지 않습니다. 기본 `memory://` 저장소는 로컬 단일 프로세스 개발용입니다. 여러 워커/인스턴스로 운영할 때는 Redis와 같은 공유 저장소를 구성하고 `RATELIMIT_STORAGE_URI=redis://...`, `RATELIMIT_REQUIRE_SHARED_STORAGE=1`을 설정하세요. 리버스 프록시 환경에서는 신뢰할 수 있는 프록시에서 실제 클라이언트 IP 전달을 별도로 설정해야 합니다.
 
 ## 🔑 API 키 발급 안내 (선택 사항)
 더 정확하고 풍부한 데이터 수집을 위해 아래 API 키 발급을 권장합니다.
